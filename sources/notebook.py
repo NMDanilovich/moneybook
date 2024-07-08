@@ -21,7 +21,7 @@ class NotebookManager:
     #     raise NotImplementedError()
 
 class MoneyManager(NotebookManager):
-    def __init__(self, valume = "Money") -> None:
+    def __init__(self, valume = "Money.db") -> None:
         super().__init__(valume)
 
     def new_notebook(self, book_name):
@@ -54,16 +54,17 @@ class Notebook(object):
     def view(self, period):
         print("Просмотр:")
         self.cursor.execute(f"SELECT * FROM '{self.book_name}'")
-        for entry in self.cursor.fetchall():
-            for val in entry:
-                print(str(val), end="|")
-            print("\n")
+        for val in self.cursor.fetchall():
+            print(*val)
 
     def entry(self, amount: float, tag: str):
+            data = datetime.datetime.now()
+            data = datetime.datetime.strftime(data, '%Y-%m-%d %H:%M')
+            
             self.cursor.execute(
                 f"""INSERT INTO {self.book_name} (datatime, tag, amount) 
                 VALUES (?, ? ,?)""",
-                (datetime.datetime.now(), tag, amount,))
+                (data, tag, amount,))
             self.connection.commit()
 
     # def correct(self):
