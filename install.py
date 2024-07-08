@@ -3,19 +3,21 @@ import os
 import PyInstaller.__main__
 
 programm_name = "moneybook"
-programm_path = "/workspace/Pets/Our_Many/dist"
+programm_path = "/dist"
+path = os.path.dirname(__file__) + programm_path
+
 PyInstaller.__main__.run([
     f'{programm_name}.py',
     '--onefile',
 ])
 
-command = f'export PATH="$PATH:~{programm_path}"'
-err = os.system(f'echo $PATH | grep -q  {programm_path}')
+command = f'export PATH="$PATH:{path}"'
+err = os.system(f'echo $PATH | grep -q  {path}')
 
 if err:
-    print("отсуствует", err)
-    with open("/home/ledovskoy/.bashrc","a+") as file:
+    with open("~/.bashrc","a+") as file:
             file.write(command + "\n")
     os.system('sudo reboot')
+    print("Программа добавлена в переменную PATH. \nПрограмма успешно установлена.")
 else:
-    print("есть!", err)
+    print("Программа уже была добавлена в переменную PATH. \nПрограмма успешно установлена.")
