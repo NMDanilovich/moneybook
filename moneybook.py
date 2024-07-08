@@ -5,36 +5,33 @@ from sources.notebook import MoneyManager
 
 def handle_args():
     args = sys.argv
-    flags = ("view")
+    otions = ("view", "entry",)
     for arg in args:
-        if arg in flags:
+        if arg in otions:
             return arg
 
     if len(args) == 3:
         return "entry"
+    else:
+        print("Используйте шаблон:")
+        print("         moneybook <tag> <amount>")
 
 def main():
-    flag = handle_args()
+    option = handle_args()
     args = sys.argv
     
     NM = MoneyManager()
     book = NM.new_notebook("test")
 
     
-    if "view" == flag:
-        
-        if args[-1] == "view":
-            period = "day"
-        else:
+    match option:
+        case "view":
             period = args[-1]
-        book.view(period=period)
-
-    elif "entry" == flag:
-        _, tag, amount = args
-        book.entry(tag=tag, amount=amount)
-    else:
-        print("Используйте шаблон:")
-        print("         moneybook <tag> <amount>")
+            book.view(period=period)
+        
+        case "entry":
+            _, tag, amount = args
+            book.entry(tag=tag, amount=amount)
 
 if __name__ == "__main__":
     main()
